@@ -75,7 +75,7 @@ class FileLoader extends ClassLoader
         } else {
             return $this->router->addRoute(
                 $methodAnnotation->getParameters()['value'],
-                $method->getName(),
+                $method->getDeclaringClass()->name . "::" . $method->getName(),
                 $methodAnnotation->getParameters()['name'],
                 $methodAnnotation->getParameters()['method']
             );
