@@ -29,28 +29,33 @@ class ClassLoader
         $this->annotationClass = $class;
     }
 
-    protected function getClassAnnotation(\ReflectionClass $method): iterable
+    /**
+     * Get the annotation class
+     *
+     * @param \ReflectionClass $class
+     * @return object|null
+     */
+    protected function getClassAnnotation(\ReflectionClass $class): ?object
     {
         // Look for @Route annotation
         try {
-            $annotations = $this->getAnnotationReader()
+            $annotation = $this->getAnnotationReader()
                 ->getClassAnnotation(
-                    $method,
+                    $class,
                     $this->annotationClass
                 );
         } catch (\Exception $e) {
             throw new \Exception(sprintf(
                 '@Route annotation on %s is malformed. %s',
-                $method->getName(),
+                $class->getName(),
                 $e->getMessage()
             ), 0, $e);
         }
 
-        foreach ($annotations as $annotation) {
-            if ($annotation instanceof $this->annotationClass) {
-                yield $annotation;
-            }
+        if ($annotation instanceof $this->annotationClass) {
+            return $annotation;
         }
+
         return null;
     }
 
