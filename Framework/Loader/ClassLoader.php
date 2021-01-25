@@ -7,6 +7,7 @@ use Framework\Loader\MethodLoader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
+use Framework\Annotation\Exception\RouteAnnotationException;
 
 class ClassLoader extends MethodLoader
 {
@@ -27,7 +28,7 @@ class ClassLoader extends MethodLoader
                     $this->annotationClass
                 );
         } catch (\Exception $e) {
-            throw new \Exception(sprintf(
+            throw new RouteAnnotationException(sprintf(
                 '@Route annotation on %s is malformed. %s',
                 $class->getName(),
                 $e->getMessage()

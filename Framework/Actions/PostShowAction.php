@@ -47,7 +47,7 @@ class PostShowAction
     /**
      * Show blog post
      * 
-     * @Route("/category/{category_id:[0-9]+}/post/{id:[0-9]+}", name="blog.postShow", method="GET")
+     * @Route("/category/{category_id:[0-9]+}/post/{id:[0-9]+}")
      * @ParameterConverter("category", options={"id"="category_id"})
      * @ParameterConverter("post", options={"id"="id"})
      *
@@ -62,7 +62,7 @@ class PostShowAction
     /**
      * Show blog post
      * 
-     * @Route("/category/{category_slug:[a-z\-0-9]+}/post/{id:[0-9]+}", name="blog.postCategoryShow", method="GET")
+     * @Route("/category/{category_slug:[a-z\-0-9]+}/post/{id:[0-9]+}", name="blog.postCategoryShow", methods={"GET"})
      * @ParameterConverter("category", options={"slug"="category_slug"})
      *
      * @param \App\Blog\Models\Categories $category

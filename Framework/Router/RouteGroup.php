@@ -6,9 +6,9 @@ use Framework\Middleware\Stack\MiddlewareAwareStackTrait;
 
 /**
  * $router->group('/admin', function (RouteGroup $route) {
- * $route->addRoute('GET', '/acme/route1', 'AcmeController::actionOne');
- * $route->addRoute('GET', '/acme/route2', 'AcmeController::actionTwo')->setScheme('https');
- * $route->addRoute('GET', '/acme/route3', 'AcmeController::actionThree');
+ * $route->addRoute('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
+ * $route->addRoute('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->setScheme('https');
+ * $route->addRoute('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
  * })
  * ->middleware(Middleware::class);
  *

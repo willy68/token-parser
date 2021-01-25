@@ -37,21 +37,24 @@ class FileLoader extends ClassLoader
 
         $reflectionClass = new \ReflectionClass($class);
         if ($reflectionClass->isAbstract()) {
-            throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $reflectionClass->getName()));
+            throw new \InvalidArgumentException(
+                sprintf('Annotations from class "%s" cannot be read as it is abstract.',
+                $reflectionClass->getName())
+            );
         }
 
         $classAnnotation = $this->getClassAnnotation($reflectionClass);
 
-        $routes = [];
+        $routes = null;
         foreach ($reflectionClass->getMethods() as $method) {
             foreach ($this->getMethodAnnotations($method) as $methodAnnotation) {
-                $routes[] = $this->addRoute($methodAnnotation, $method, $classAnnotation);
+                $routes = $this->addRoute($methodAnnotation, $method, $classAnnotation);
             }
         }
         return $routes;
     }
 
-    public function addRoute(
+    protected function addRoute(
         object $methodAnnotation,
         ReflectionMethod $method,
         ?object $classAnnotation
@@ -59,13 +62,13 @@ class FileLoader extends ClassLoader
 
         if ($classAnnotation) {
             $routeGroup = new RouteGroup(
-                $classAnnotation->getParameters()['value'],
+                $classAnnotation->getPath(),
                 function (RouteGroup $routeGroup) use ($methodAnnotation, $method) {
                     $routeGroup->addRoute(
-                        $methodAnnotation->getParameters()['value'],
+                        $methodAnnotation->getPath(),
                         $method->getDeclaringClass()->name . "::" . $method->getName(),
-                        $methodAnnotation->getParameters()['name'],
-                        [$methodAnnotation->getParameters()['method']]
+                        $methodAnnotation->getName(),
+                        $methodAnnotation->getMethods()
                     );
                 },
                 $this->router
@@ -74,10 +77,10 @@ class FileLoader extends ClassLoader
             return $routeGroup;
         } else {
             return $this->router->addRoute(
-                $methodAnnotation->getParameters()['value'],
+                $methodAnnotation->getPath(),
                 $method->getDeclaringClass()->name . "::" . $method->getName(),
-                $methodAnnotation->getParameters()['name'],
-                $methodAnnotation->getParameters()['method']
+                $methodAnnotation->getName(),
+                $methodAnnotation->getMethods()
             );
         }
     }
