@@ -4,7 +4,7 @@ namespace Framework\Actions;
 
 use Framework\Annotation\Route;
 use Framework\Annotation\ParameterConverter;
-
+use Framework\Router\Router;
 
 /**
  * @Route("/Blog")
@@ -20,7 +20,7 @@ class PostShowAction
 
     /**
      *
-     * @var \Framework\Router
+     * @var \Framework\Router\Router
      */
     private $router;
 
@@ -28,8 +28,9 @@ class PostShowAction
      * Constructeur
      *
      */
-    public function __construct(
-    ) {
+    public function __construct(Router $router)
+    {
+        $this->router = $router;
     }
 
     /**
@@ -61,6 +62,7 @@ class PostShowAction
     /**
      * Show blog post
      * 
+     * @Route("/category/{category_slug:[a-z\-0-9]+}/post/{id:[0-9]+}", name="blog.postCategoryShow", method="GET")
      * @ParameterConverter("category", options={"slug"="category_slug"})
      *
      * @param \App\Blog\Models\Categories $category

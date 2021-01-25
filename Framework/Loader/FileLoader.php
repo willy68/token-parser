@@ -4,14 +4,24 @@ namespace Framework\Loader;
 
 use Doctrine\Common\Annotations\Reader;
 use Framework\Parser\PhpTokenParser;
+use Framework\Router\RouteGroup;
+use Framework\Router\Router;
+use ReflectionMethod;
 
 class FileLoader extends ClassLoader
 {
     protected $parser;
 
-    public function __construct(PhpTokenParser $parser, ?Reader $reader = null)
-    {
-       $this->parser = $parser; 
+    protected $router;
+
+    public function __construct(
+        PhpTokenParser $parser,
+        Router $router,
+        ?Reader $reader = null
+    ) {
+        parent::__construct($reader);
+        $this->parser = $parser;
+        $this->router = $router;
     }
 
     public function load(string $file)
@@ -21,21 +31,54 @@ class FileLoader extends ClassLoader
         }
 
         $class = $this->parser->findClass($file);
-
-        if ($class) {
-            $reflectionClass = new \ReflectionClass($class);
-            $classAnnotation = $this->getClassAnnotation($reflectionClass);
-
-            foreach($reflectionClass->getMethods() as $method) {
-                foreach($this->getMethodAnnotations($method) as $methodAnnotation) {
-                    $methodAnnotations[] = $methodAnnotation;
-                }
-            }
-            return [$classAnnotation, $methodAnnotation];
-            
+        if (!$class) {
+            return null;
         }
 
-        return null;
+        $reflectionClass = new \ReflectionClass($class);
+        if ($reflectionClass->isAbstract()) {
+            throw new \InvalidArgumentException(sprintf('Annotations from class "%s" cannot be read as it is abstract.', $reflectionClass->getName()));
+        }
+
+        $classAnnotation = $this->getClassAnnotation($reflectionClass);
+
+        $routes = [];
+        foreach ($reflectionClass->getMethods() as $method) {
+            foreach ($this->getMethodAnnotations($method) as $methodAnnotation) {
+                $routes[] = $this->addRoute($methodAnnotation, $method, $classAnnotation);
+            }
+        }
+        return $routes;
     }
 
+    public function addRoute(
+        object $methodAnnotation,
+        ReflectionMethod $method,
+        ?object $classAnnotation
+    ) {
+
+        if ($classAnnotation) {
+            $routeGroup = new RouteGroup(
+                $classAnnotation->getParameters()['value'],
+                function (RouteGroup $routeGroup) use ($methodAnnotation, $method) {
+                    $routeGroup->addRoute(
+                        $methodAnnotation->getParameters()['value'],
+                        $method->getDeclaringClass()->name . "::" . $method->getName(),
+                        $methodAnnotation->getParameters()['name'],
+                        [$methodAnnotation->getParameters()['method']]
+                    );
+                },
+                $this->router
+            );
+            $routeGroup();
+            return $routeGroup;
+        } else {
+            return $this->router->addRoute(
+                $methodAnnotation->getParameters()['value'],
+                $method->getName(),
+                $methodAnnotation->getParameters()['name'],
+                $methodAnnotation->getParameters()['method']
+            );
+        }
+    }
 }

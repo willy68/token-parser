@@ -20,5 +20,8 @@
         "psr-4": {
             "Framework\\": "Framework"
         }
+    },
+    "require-dev": {
+        "symfony/var-dumper": "5.x-dev"
     }
 }

@@ -68,7 +68,7 @@ class Router
      * @param ContainerInterface $c
      * @param string|null $cache
      */
-    public function __construct(ContainerInterface $c, ?string $cache = null)
+    public function __construct(?ContainerInterface $c = null, ?string $cache = null)
     {
         $this->container = $c;
         $this->router = new FastRouteRouter(null, null, [
