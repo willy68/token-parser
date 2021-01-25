@@ -6,12 +6,17 @@ namespace Framework\Annotation;
  * @Target({"METHOD"})
  * 
  */
-class RouteAnnotation
+class Route
 {
     private $parameters = [];
 
     public function __construct(array $parameters)
     {
         $this->parameters = $parameters;
+    }
+
+    public function getParameters(): array
+    {
+        return $this->parameters;
     }
 }
