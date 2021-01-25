@@ -1,12 +1,14 @@
 <?php
+
 namespace Framework\Annotation;
+
 
 /**
  * @Annotation
- * @Target({"CLASS", "METHOD"})
+ * @Target({"METHOD"})
  * 
  */
-class Route
+class ParameterConverter
 {
     private $parameters = [];
 

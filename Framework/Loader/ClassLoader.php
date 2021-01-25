@@ -3,31 +3,13 @@
 namespace Framework\Loader;
 
 use Framework\Annotation\Route;
+use Framework\Loader\MethodLoader;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 
-class ClassLoader
+class ClassLoader extends MethodLoader
 {
-    protected $reader;
-
-    protected $annotationClass = Route::class;
-
-    public function __construct(?Reader $reader = null)
-    {
-        $this->reader = $reader;
-    }
-
-    /**
-     * Change Annotation class
-     *
-     * @param string $class
-     * @return void
-     */
-    public function setAnnotation(string $class)
-    {
-        $this->annotationClass = $class;
-    }
 
     /**
      * Get the annotation class
@@ -57,18 +39,5 @@ class ClassLoader
         }
 
         return null;
-    }
-
-    /**
-     * @return AnnotationReader The annotation reader
-     */
-    public function getAnnotationReader(): Reader
-    {
-        if ($this->reader === null) {
-            AnnotationRegistry::registerLoader('class_exists');
-            $this->reader = new AnnotationReader();
-        }
-
-        return $this->annotationReader;
     }
 }

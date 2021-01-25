@@ -1,6 +1,6 @@
 <?php
 
-namespace Framework\loader;
+namespace Framework\Loader;
 
 use Framework\Annotation\Route;
 use Doctrine\Common\Annotations\Reader;
@@ -8,7 +8,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use ReflectionMethod;
 
-class Methodreader
+class MethodLoader
 {
     protected $reader;
 
@@ -65,6 +65,6 @@ class Methodreader
             $this->reader = new AnnotationReader();
         }
 
-        return $this->annotationReader;
+        return $this->reader;
     }
 }
