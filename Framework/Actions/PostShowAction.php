@@ -7,7 +7,7 @@ use Framework\Annotation\ParameterConverter;
 use Framework\Router\Router;
 
 /**
- * @Route("/Blog")
+ * @Route("/blog")
  */
 class PostShowAction
 {
