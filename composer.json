@@ -1,0 +1,20 @@
+{
+    "name": "willy/token-parser",
+    "description": "test d'annotation de route",
+    "type": "library",
+    "authors": [
+        {
+            "name": "willy68",
+            "email": "william.lety@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "doctrine/annotations": "1.11.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "Framework\\": "Framework"
+        }
+    }
+}
