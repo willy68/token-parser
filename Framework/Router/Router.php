@@ -100,9 +100,9 @@ class Router
      * Add RouteGroup
      *
      * $router->group('/admin', function (RouteGroup $route) {
-     *  $route->addRoute('GET', '/acme/route1', 'AcmeController::actionOne');
-     *  $route->addRoute('GET', '/acme/route2', 'AcmeController::actionTwo')->lazyMiddleware(Middleware::class);
-     *  $route->addRoute('GET', '/acme/route3', 'AcmeController::actionThree');
+     *  $route->addRoute('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
+     *  $route->addRoute('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->lazyMiddleware(Middleware::class);
+     *  $route->addRoute('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
      * })
      * ->middleware(Middleware::class);
      *
@@ -168,6 +168,7 @@ class Router
             );
         }
         if ($result->isMethodFailure()) {
+            $this->methodResultFailure['method.failure'] = true;
             return RouteResult::fromRouteFailure($result->getAllowedMethods());
         }
         return null;
@@ -183,6 +184,10 @@ class Router
      */
     public function generateUri(string $name, array $params = [], array $queryParams = []): string
     {
+        // If router don't know all routes!
+        $this->processGroups();
+        $this->pendingRoutes();
+
         $uri = $this->router->generateUri($name, $params);
         if (!empty($queryParams)) {
             return $uri . '?' . http_build_query($queryParams);

@@ -26,7 +26,7 @@ class Route
         // Method param name
         if (!isset($parameters['value'])) {
             throw new RouteAnnotationException(sprintf(
-                '@Route("/path/route/{id:\d+}", name="path.route", methods={"GET"}) expects parameter "name", %s given.',
+                '@Route("/path/route/{id:\d+}", name="path.route", methods={"GET"}) expects first parameter "path", %s given.',
                 json_encode($parameters)
             ));
         }
@@ -35,8 +35,8 @@ class Route
         $this->path = $parameters['value'];
         $this->name = $parameters['name'] ?? null;
         $this->host = $parameters['host'] ?? null;
-        $this->methods = $parameters['methods'];
-        $this->schemes = $parameters['schemes'] ?? null;
+        $this->methods = $parameters['methods'] ?? [];
+        $this->schemes = $parameters['schemes'] ?? [];
 
     }
 

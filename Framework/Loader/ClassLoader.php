@@ -20,6 +20,10 @@ class ClassLoader extends MethodLoader
      */
     protected function getClassAnnotation(\ReflectionClass $class): ?object
     {
+        if ($class->isAbstract()) {
+            return null;
+        }
+        
         // Look for @Route annotation
         try {
             $annotation = $this->getAnnotationReader()

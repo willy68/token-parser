@@ -24,6 +24,12 @@ class FileLoader extends ClassLoader
         $this->router = $router;
     }
 
+    /**
+     * Parse annotations @Route and add routes to the router
+     *
+     * @param string $file
+     * @return RouteGroup[]|Route[]|null
+     */
     public function load(string $file)
     {
         if (!is_file($file)) {
@@ -45,15 +51,23 @@ class FileLoader extends ClassLoader
 
         $classAnnotation = $this->getClassAnnotation($reflectionClass);
 
-        $routes = null;
+        $routes = [];
         foreach ($reflectionClass->getMethods() as $method) {
             foreach ($this->getMethodAnnotations($method) as $methodAnnotation) {
-                $routes = $this->addRoute($methodAnnotation, $method, $classAnnotation);
+                $routes[] = $this->addRoute($methodAnnotation, $method, $classAnnotation);
             }
         }
         return $routes;
     }
 
+    /**
+     * Add route to router
+     *
+     * @param object $methodAnnotation
+     * @param \ReflectionMethod $method
+     * @param object|null $classAnnotation
+     * @return void
+     */
     protected function addRoute(
         object $methodAnnotation,
         ReflectionMethod $method,
@@ -61,7 +75,7 @@ class FileLoader extends ClassLoader
     ) {
 
         if ($classAnnotation) {
-            $routeGroup = new RouteGroup(
+            return $this->router->group(
                 $classAnnotation->getPath(),
                 function (RouteGroup $routeGroup) use ($methodAnnotation, $method) {
                     $routeGroup->addRoute(
@@ -70,11 +84,8 @@ class FileLoader extends ClassLoader
                         $methodAnnotation->getName(),
                         $methodAnnotation->getMethods()
                     );
-                },
-                $this->router
-            );
-            $routeGroup();
-            return $routeGroup;
+                }
+            );   
         } else {
             return $this->router->addRoute(
                 $methodAnnotation->getPath(),
