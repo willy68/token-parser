@@ -1,15 +1,16 @@
 <?PHP
 
+include "vendor/autoload.php";
+
+use Framework\Actions\PostShowAction;
 use Framework\Loader\DirectoryLoader;
-use Framework\Loader\FileLoader;
 use Framework\Parser\PhpTokenParser;
 use Framework\Router\Router;
 
-include "vendor/autoload.php";
-
 $router = new Router(null, null);
 $dir = new DirectoryLoader(new PhpTokenParser(), $router);
-$fileLoader = new FileLoader(new PhpTokenParser(), $router);
-$annot = $fileLoader->load("Framework/Actions/PostShowAction.php");
-$files = $dir->getFiles('Framework/Actions');
-dd($annot, $router, $files);
+$dirAnnot = $dir->load('src/Actions');
+$files = $dir->getFiles('src/Actions');
+$group = $router->crud('blog', PostShowAction::class, 'blog');
+$group();
+dd($router, $files, $group);

@@ -2,11 +2,7 @@
 
 namespace Framework\Loader;
 
-use Framework\Annotation\Route;
 use Framework\Loader\MethodLoader;
-use Doctrine\Common\Annotations\Reader;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use Framework\Annotation\Exception\RouteAnnotationException;
 
 class ClassLoader extends MethodLoader

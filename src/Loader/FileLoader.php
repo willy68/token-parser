@@ -43,10 +43,7 @@ class FileLoader extends ClassLoader
 
         $reflectionClass = new \ReflectionClass($class);
         if ($reflectionClass->isAbstract()) {
-            throw new \InvalidArgumentException(
-                sprintf('Annotations from class "%s" cannot be read as it is abstract.',
-                $reflectionClass->getName())
-            );
+            return null;
         }
 
         $classAnnotation = $this->getClassAnnotation($reflectionClass);
@@ -57,6 +54,8 @@ class FileLoader extends ClassLoader
                 $routes[] = $this->addRoute($methodAnnotation, $method, $classAnnotation);
             }
         }
+
+        gc_mem_caches();
         return $routes;
     }
 
@@ -80,7 +79,7 @@ class FileLoader extends ClassLoader
                 function (RouteGroup $routeGroup) use ($methodAnnotation, $method) {
                     $routeGroup->addRoute(
                         $methodAnnotation->getPath(),
-                        $method->getDeclaringClass()->name . "::" . $method->getName(),
+                        $method->getDeclaringClass()->getName() . "::" . $method->getName(),
                         $methodAnnotation->getName(),
                         $methodAnnotation->getMethods()
                     );
@@ -89,7 +88,7 @@ class FileLoader extends ClassLoader
         } else {
             return $this->router->addRoute(
                 $methodAnnotation->getPath(),
-                $method->getDeclaringClass()->name . "::" . $method->getName(),
+                $method->getDeclaringClass()->getName() . "::" . $method->getName(),
                 $methodAnnotation->getName(),
                 $methodAnnotation->getMethods()
             );

@@ -1,4 +1,5 @@
 <?Php
+
 namespace Framework\Parser;
 
 
@@ -7,10 +8,9 @@ class PhpTokenParser
 
     public function __construct()
     {
-        if(!\function_exists('token_get_all')) {
+        if (!\function_exists('token_get_all')) {
             throw new \LogicException("Function token_get_all don't exists in this system");
         }
-        
     }
 
     /**
@@ -58,7 +58,7 @@ class PhpTokenParser
         }
         return false;
     }
-/*
+    /*
     public function extractPhpClasses(string $path)
     {
         $code = file_get_contents($path);
@@ -94,5 +94,40 @@ class PhpTokenParser
             next($tokens);
         }
         return $res;
-    }*/
+    }
+
+    // from https://stackoverflow.com/a/14250011
+    function findClass($file)
+    {
+        $php_code = file_get_contents ( $file );
+        $classes = array ();
+        $namespace="";
+        $tokens = token_get_all ( $php_code );
+        $count = count ( $tokens );
+
+        for($i = 0; $i < $count; $i ++)
+        {
+            if ($tokens[$i][0]===T_NAMESPACE)
+            {
+                for ($j=$i+1;$j<$count;++$j)
+                {
+                    if ($tokens[$j][0]===T_STRING)
+                        $namespace.="\\".$tokens[$j][1];
+                    elseif ($tokens[$j]==='{' or $tokens[$j]===';')
+                        break;
+                }
+            }
+            if ($tokens[$i][0]===T_CLASS)
+            {
+                for ($j=$i+1;$j<$count;++$j)
+                    if ($tokens[$j]==='{')
+                    {
+                        $classes[]=$namespace."\\".$tokens[$i+2][1];
+                    }
+            }
+        }
+        return $classes;
+    }
+    */
+
 }

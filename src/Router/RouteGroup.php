@@ -94,11 +94,11 @@ class RouteGroup
     public function crud($callable, string $prefixName): self
     {
         $this->get("/", $callable . '::index', "$prefixName.index");
-        $this->get("$this->prefix/new", $callable . '::create', "$prefixName.create");
-        $this->post("$this->prefix/new", $callable . '::create');
-        $this->get("$this->prefix/{id:\d+}", $callable . '::edit', "$prefixName.edit");
-        $this->post("$this->prefix/{id:\d+}", $callable . '::edit');
-        $this->delete("$this->prefix/{id:\d+}", $callable . '::delete', "$prefixName.delete");
+        $this->get("/new", $callable . '::create', "$prefixName.create");
+        $this->post("/new", $callable . '::create');
+        $this->get("/{id:\d+}", $callable . '::edit', "$prefixName.edit");
+        $this->post("/{id:\d+}", $callable . '::edit');
+        $this->delete("/{id:\d+}", $callable . '::delete', "$prefixName.delete");
         return $this;
     }
 

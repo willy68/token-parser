@@ -31,6 +31,12 @@ class MethodLoader
         $this->annotationClass = $class;
     }
 
+    /**
+     * Recherche les annotations de route
+     *
+     * @param \ReflectionMethod $method
+     * @return iterable|null
+     */
     protected function getMethodAnnotations(ReflectionMethod $method): ?iterable
     {
         // Look for @Route annotation

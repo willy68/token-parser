@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Framework\\": "Framework"
+            "Framework\\": "src"
         }
     },
     "require-dev": {

@@ -5,7 +5,7 @@ use Framework\Annotation\Exception\RouteAnnotationException;
 
 /**
  * 
- * Ex: @Route("/path/route/{id:\d+}", name="path.route", methods={"GET"})
+ * Ex: @Route("/route/{id:\d+}", name="path.route", methods={"GET"})
  * 
  * @Annotation
  * @Target({"CLASS", "METHOD"})
@@ -26,7 +26,7 @@ class Route
         // Method param name
         if (!isset($parameters['value'])) {
             throw new RouteAnnotationException(sprintf(
-                '@Route("/path/route/{id:\d+}", name="path.route", methods={"GET"}) expects first parameter "path", %s given.',
+                '@Route("/route/{id:\d+}", name="path.route", methods={"GET"}) expects first parameter "path", %s given.',
                 json_encode($parameters)
             ));
         }
@@ -48,7 +48,7 @@ class Route
     /**
      * Get the value of path
      */ 
-    public function getPath()
+    public function getPath(): string
     {
         return $this->path;
     }
@@ -56,7 +56,7 @@ class Route
     /**
      * Get the value of name
      */ 
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -64,7 +64,7 @@ class Route
     /**
      * Get the value of host
      */ 
-    public function getHost()
+    public function getHost(): ?string
     {
         return $this->host;
     }
@@ -72,7 +72,7 @@ class Route
     /**
      * Get the value of methods
      */ 
-    public function getMethods()
+    public function getMethods(): array
     {
         return $this->methods;
     }
@@ -80,7 +80,7 @@ class Route
     /**
      * Get the value of schemes
      */ 
-    public function getSchemes()
+    public function getSchemes(): array
     {
         return $this->schemes;
     }
