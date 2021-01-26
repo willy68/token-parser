@@ -19,6 +19,7 @@ class DirectoryLoader extends FileLoader
 
     public function getFiles(string $path)
     {
+        // from https://stackoverflow.com/a/41636321
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator(
                 $path,
