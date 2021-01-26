@@ -5,12 +5,15 @@ namespace Framework\Router;
 use Framework\Middleware\Stack\MiddlewareAwareStackTrait;
 
 /**
+ * Ex:
+ * ```
  * $router->group('/admin', function (RouteGroup $route) {
  * $route->addRoute('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
  * $route->addRoute('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->setScheme('https');
  * $route->addRoute('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
  * })
  * ->middleware(Middleware::class);
+ * ```
  *
  */
 class RouteGroup
@@ -76,7 +79,7 @@ class RouteGroup
     {
         $path  = ($uri === '/') ? $this->prefix : $this->prefix . sprintf('/%s', ltrim($uri, '/'));
         if ($name === null) {
-            $name = ($method === null) ? $uri : $uri . '^' . join(':', $method);
+            $name = ($method === null) ? $this->prefix . $uri : $this->prefix . $uri . '^' . join(':', $method);
         }
         $route = $this->router->addRoute($path, $callable, $name, $method);
 

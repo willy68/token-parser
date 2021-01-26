@@ -10,6 +10,7 @@
     ],
     "minimum-stability": "dev",
     "require": {
+        "php": ">=7.2.5",
         "doctrine/annotations": "1.11.x-dev",
         "psr/container": "1.1.x-dev",
         "psr/http-message": "1.0.x-dev",

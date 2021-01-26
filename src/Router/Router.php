@@ -99,12 +99,15 @@ class Router
     /**
      * Add RouteGroup
      *
+     * Ex:
+     * ```
      * $router->group('/admin', function (RouteGroup $route) {
      *  $route->addRoute('/acme/route1', 'AcmeController::actionOne', 'route1', [GET]);
      *  $route->addRoute('/acme/route2', 'AcmeController::actionTwo', 'route2', [GET])->lazyMiddleware(Middleware::class);
      *  $route->addRoute('/acme/route3', 'AcmeController::actionThree', 'route3', [GET]);
      * })
      * ->middleware(Middleware::class);
+     * ```
      *
      * @param string $prefix
      * @param callable $callable
@@ -137,11 +140,11 @@ class Router
     }
 
     /**
-   * Undocumented function
-   *
-   * @param ServerRequestInterface $request
-   * @return RouteResult|null
-   */
+     * Match a request against the known routes.
+     *
+     * @param ServerRequestInterface $request
+     * @return RouteResult|null
+     */
     public function match(ServerRequestInterface $request): ?RouteResult
     {
         $this->processGroups();
@@ -175,7 +178,7 @@ class Router
     }
 
     /**
-     * Undocumented function
+     * Generate a URI based on a given route.
      *
      * @param string $name
      * @param array $params
