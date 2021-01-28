@@ -3,19 +3,10 @@
 namespace Framework\Loader;
 
 use Framework\Router\Router;
-use Framework\Parser\PhpTokenParser;
 use Doctrine\Common\Annotations\Reader;
 
 class DirectoryLoader extends FileLoader
 {
-
-    public function __construct(
-        PhpTokenParser $parser,
-        Router $router,
-        ?Reader $reader = null
-    ) {
-        parent::__construct($parser, $router, $reader);
-    }
 
     /**
      * Find all php files with @Route annotations

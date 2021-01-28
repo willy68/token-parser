@@ -35,8 +35,8 @@ class Route
         $this->path = $parameters['value'];
         $this->name = $parameters['name'] ?? null;
         $this->host = $parameters['host'] ?? null;
-        $this->methods = $parameters['methods'] ?? [];
-        $this->schemes = $parameters['schemes'] ?? [];
+        $this->methods = $parameters['methods'] ?? null;
+        $this->schemes = $parameters['schemes'] ?? null;
 
     }
 
@@ -72,7 +72,7 @@ class Route
     /**
      * Get the value of methods
      */ 
-    public function getMethods(): array
+    public function getMethods(): ?array
     {
         return $this->methods;
     }
@@ -80,7 +80,7 @@ class Route
     /**
      * Get the value of schemes
      */ 
-    public function getSchemes(): array
+    public function getSchemes(): ?array
     {
         return $this->schemes;
     }

@@ -19,7 +19,7 @@ class PhpTokenParser
      * @param string $file A PHP file path
      * @return string|false Full class name if found, false otherwise
      */
-    public function findClass($file)
+    static public function findClass($file)
 
     {
         $class = false;

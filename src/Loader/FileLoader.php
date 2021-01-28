@@ -10,17 +10,17 @@ use ReflectionMethod;
 
 class FileLoader extends ClassLoader
 {
-    protected $parser;
-
     protected $router;
 
     public function __construct(
-        PhpTokenParser $parser,
         Router $router,
         ?Reader $reader = null
     ) {
+        if (!\function_exists('token_get_all')) {
+            throw new \LogicException("Function token_get_all don't exists in this system");
+        }
+
         parent::__construct($reader);
-        $this->parser = $parser;
         $this->router = $router;
     }
 
@@ -36,7 +36,7 @@ class FileLoader extends ClassLoader
             return null;
         }
 
-        $class = $this->parser->findClass($file);
+        $class = PhpTokenParser::findClass($file);
         if (!$class) {
             return null;
         }
